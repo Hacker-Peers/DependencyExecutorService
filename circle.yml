@@ -4,6 +4,7 @@ machine:
 dependencies:
   override:
      - chmod +x gradlew
+     - chmod +x gradle
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
