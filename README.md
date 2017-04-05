@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Hacker-Peers/DependencyExecutorService.svg?style=shield)](https://circleci.com/gh/Hacker-Peers/DependencyExecutorService)
+
 ## Description
 This project is a library that aims to facilitate the management of tasks having dependencies with one another.
 
