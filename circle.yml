@@ -7,4 +7,4 @@ dependencies:
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/target/surefire-reports/testng-native-results/junitreports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

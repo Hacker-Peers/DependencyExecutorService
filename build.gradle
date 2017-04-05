@@ -16,5 +16,7 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.testng', name: 'testng', version: '6.11'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
 }
