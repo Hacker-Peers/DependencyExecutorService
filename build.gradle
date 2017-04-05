@@ -1,7 +1,7 @@
-plugins {
-    id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.8.1'
-}
+//plugins {
+//    id 'jacoco'
+//    id 'com.github.kt3k.coveralls' version '2.8.1'
+//}
 
 group 'org.hackerpeers'
 version '1.0-SNAPSHOT'
