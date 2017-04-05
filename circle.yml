@@ -7,7 +7,6 @@ dependencies:
      - chmod +x gradle
 test:
   post:
-    - gradle test --stacktrace
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
     - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

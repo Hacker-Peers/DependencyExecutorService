@@ -1,7 +1,7 @@
-plugins {
-    id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.8.1'
-}
+//plugins {
+//    id 'jacoco'
+//    id 'com.github.kt3k.coveralls' version '2.8.1'
+//}
 
 group 'org.hackerpeers'
 version '1.0-SNAPSHOT'
@@ -27,9 +27,9 @@ dependencies {
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
+//jacocoTestReport {
+//    reports {
+//        xml.enabled = true // coveralls plugin depends on xml format report
+//        html.enabled = true
+//    }
+//}
