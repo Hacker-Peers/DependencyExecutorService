@@ -12,3 +12,4 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
     - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r ./build/reports/tests $CIRCLE_TEST_REPORTS/junit-html/
+    - cp ./target/libs/*.jar $CIRCLE_TEST_REPORTS
