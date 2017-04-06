@@ -1,10 +1,9 @@
 machine:
   java:
-    version: openjdk8
+    version: openjdk7
 dependencies:
   override:
      - chmod +x gradlew
-     - chmod +x gradle
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
