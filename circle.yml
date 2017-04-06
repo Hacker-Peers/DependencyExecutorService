@@ -5,8 +5,6 @@ dependencies:
   override:
      - chmod +x gradlew
 test:
-  override:
-     - if [ -e ./gradlew ]; then ./gradlew test jacocoTestReport;else gradle test jacocoTestReport;fi
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
