@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/Hacker-Peers/DependencyExecutorService.svg?style=shield)](https://circleci.com/gh/Hacker-Peers/DependencyExecutorService)
+[![CircleCI](https://circleci.com/gh/Hacker-Peers/DependencyExecutorService.svg?style=shield)](https://circleci.com/gh/Hacker-Peers/DependencyExecutorService) [![Coverage Status](https://coveralls.io/repos/github/Hacker-Peers/DependencyExecutorService/badge.svg?branch=master)](https://coveralls.io/github/Hacker-Peers/DependencyExecutorService?branch=master)
 
 ## Description
 This project is a library that aims to facilitate the management of tasks having dependencies with one another.
