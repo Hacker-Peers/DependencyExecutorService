@@ -1,13 +1,12 @@
-group 'org.hackerpeers'
-version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-apply plugin: 'jacoco'
-
 plugins {
     id 'com.github.kt3k.coveralls' version '2.8.1'
 }
 
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+group 'org.hackerpeers'
+version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
