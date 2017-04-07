@@ -1,5 +1,6 @@
 package org.hackerpeers.dependencyexecutorservice;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -20,6 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -103,6 +105,64 @@ public class DependencyExecutorServiceImplTest {
         // Then
         verify(mockExecutorService, times(1)).awaitTermination(12345, TimeUnit.MINUTES);
         assertThat(actual, is(false));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void submitCallableWithDependenciesCallsDelegateWithProperParametersAndReturnSameValue() throws InterruptedException {
+        // Given
+        final Future expected = mock(Future.class);
+        final Callable param = mock(Callable.class);
+        final Future dependency = mock(Future.class);
+        ArgumentCaptor<CallableWithDepencencies> callableCaptor = ArgumentCaptor.forClass(CallableWithDepencencies.class);
+        doReturn(expected).when(mockExecutorService).submit(any(Callable.class));
+
+        // When
+        Future actual = subject.submit(param, dependency);
+
+        // Then
+        verify(mockExecutorService, times(1)).submit(callableCaptor.capture());
+        assertThat(callableCaptor.getValue().getDelegate(), is(sameInstance(param)));
+        assertThat(actual, is(sameInstance(expected)));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void submitRunnableWithDependenciesCallsDelegateWithProperParametersAndReturnSameValue() throws InterruptedException {
+        // Given
+        final Future expected = mock(Future.class);
+        final Runnable param = mock(Runnable.class);
+        final Future dependency = mock(Future.class);
+        ArgumentCaptor<RunnableWithDepencencies> runnableCaptor = ArgumentCaptor.forClass(RunnableWithDepencencies.class);
+        doReturn(expected).when(mockExecutorService).submit(any(Runnable.class));
+
+        // When
+        Future actual = subject.submit(param, new Future[] {dependency});
+
+        // Then
+        verify(mockExecutorService, times(1)).submit(runnableCaptor.capture());
+        assertThat(runnableCaptor.getValue().getDelegate(), is(sameInstance(param)));
+        assertThat(actual, is(sameInstance(expected)));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void submitRunnableWithDependenciesAndResultCallsDelegateWithProperParametersAndReturnSameValue() throws InterruptedException {
+        // Given
+        final Future expected = mock(Future.class);
+        final Runnable param = mock(Runnable.class);
+        final Future dependency = mock(Future.class);
+        final Object result = new Object(){};
+        ArgumentCaptor<RunnableWithDepencencies> runnableCaptor = ArgumentCaptor.forClass(RunnableWithDepencencies.class);
+        doReturn(expected).when(mockExecutorService).submit(any(Runnable.class), anyObject());
+
+        // When
+        Future actual = subject.submit(param, result, dependency);
+
+        // Then
+        verify(mockExecutorService, times(1)).submit(runnableCaptor.capture(), eq(result));
+        assertThat(runnableCaptor.getValue().getDelegate(), is(sameInstance(param)));
+        assertThat(actual, is(sameInstance(expected)));
     }
 
     @Test
