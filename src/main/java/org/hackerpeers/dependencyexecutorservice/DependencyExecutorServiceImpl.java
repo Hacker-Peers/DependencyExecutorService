@@ -99,4 +99,7 @@ class DependencyExecutorServiceImpl implements DependencyExecutorService{
         delegate.execute(command);
     }
 
+    ExecutorService getDelegate() {
+        return delegate;
+    }
 }
