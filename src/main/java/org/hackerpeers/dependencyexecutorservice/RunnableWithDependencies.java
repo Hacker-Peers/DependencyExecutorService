@@ -6,11 +6,11 @@ import java.util.concurrent.Future;
 /**
  * @author @sberthiaume
  */
-class RunnableWithDepencencies implements Runnable {
+class RunnableWithDependencies implements Runnable {
     private final Runnable delegate;
     private final Future<?>[] dependencies;
 
-    RunnableWithDepencencies(Runnable delegate, Future<?> ... dependencies) {
+    RunnableWithDependencies(Runnable delegate, Future<?> ... dependencies) {
         this.delegate = delegate;
         this.dependencies = dependencies;
     }

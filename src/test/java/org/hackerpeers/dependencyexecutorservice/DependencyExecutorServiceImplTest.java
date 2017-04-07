@@ -114,7 +114,7 @@ public class DependencyExecutorServiceImplTest {
         final Future expected = mock(Future.class);
         final Callable param = mock(Callable.class);
         final Future dependency = mock(Future.class);
-        ArgumentCaptor<CallableWithDepencencies> callableCaptor = ArgumentCaptor.forClass(CallableWithDepencencies.class);
+        ArgumentCaptor<CallableWithDependencies> callableCaptor = ArgumentCaptor.forClass(CallableWithDependencies.class);
         doReturn(expected).when(mockExecutorService).submit(any(Callable.class));
 
         // When
@@ -133,7 +133,7 @@ public class DependencyExecutorServiceImplTest {
         final Future expected = mock(Future.class);
         final Runnable param = mock(Runnable.class);
         final Future dependency = mock(Future.class);
-        ArgumentCaptor<RunnableWithDepencencies> runnableCaptor = ArgumentCaptor.forClass(RunnableWithDepencencies.class);
+        ArgumentCaptor<RunnableWithDependencies> runnableCaptor = ArgumentCaptor.forClass(RunnableWithDependencies.class);
         doReturn(expected).when(mockExecutorService).submit(any(Runnable.class));
 
         // When
@@ -153,7 +153,7 @@ public class DependencyExecutorServiceImplTest {
         final Runnable param = mock(Runnable.class);
         final Future dependency = mock(Future.class);
         final Object result = new Object(){};
-        ArgumentCaptor<RunnableWithDepencencies> runnableCaptor = ArgumentCaptor.forClass(RunnableWithDepencencies.class);
+        ArgumentCaptor<RunnableWithDependencies> runnableCaptor = ArgumentCaptor.forClass(RunnableWithDependencies.class);
         doReturn(expected).when(mockExecutorService).submit(any(Runnable.class), anyObject());
 
         // When

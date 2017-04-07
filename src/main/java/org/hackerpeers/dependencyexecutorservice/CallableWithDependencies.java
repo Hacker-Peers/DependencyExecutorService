@@ -6,11 +6,11 @@ import java.util.concurrent.Future;
 /**
  * @author @sberthiaume
  */
-class CallableWithDepencencies<T> implements Callable<T> {
+class CallableWithDependencies<T> implements Callable<T> {
     private final Callable<T> delegate;
     private final Future<?>[] dependencies;
 
-    CallableWithDepencencies(Callable<T> delegate, Future<?> ... dependencies) {
+    CallableWithDependencies(Callable<T> delegate, Future<?> ... dependencies) {
         this.delegate = delegate;
         this.dependencies = dependencies;
     }
