@@ -1,14 +1,16 @@
 package org.hackerpeers.dependencyexecutorservice;
 
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,8 +22,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * @author @sberthiaume
  */
-public class DependencyExecutorsIT {
-    private static final long JOB_DELAY = 500L;
+public class DependencyExecutorsIT{
     private static final int NB_THREADS = 10;
     private static final String A = "A";
     private static final String B = "B";
@@ -37,13 +38,19 @@ public class DependencyExecutorsIT {
     private static final String L = "L";
     private static final String M = "M";
 
-    private DependencyExecutorService subject;
-    private Future<?> initialDelay;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        subject = DependencyExecutors.newDependencyExecutorWithDelegate(Executors.newFixedThreadPool(NB_THREADS));
-        initialDelay = subject.submit(new DelayJob(JOB_DELAY));
+    @DataProvider(name = "dependencyExecutorServiceProvider")
+    public Object[][] dependencyExecutorServiceProvider() {
+        List<Object[]> dependencyServices = new ArrayList<>(6);
+
+        dependencyServices.add(new Object[] {"newFixedThreadPool(int)",                 DependencyExecutors.newFixedThreadPool(NB_THREADS), new CountDownLatch(1)});
+        dependencyServices.add(new Object[] {"newFixedThreadPool(int, ThreadFactory)",  DependencyExecutors.newFixedThreadPool(NB_THREADS, new TestThreadFactory("newFixedThreadPool")), new CountDownLatch(1)});
+        dependencyServices.add(new Object[] {"newSingleThreadExecutor()",               DependencyExecutors.newSingleThreadExecutor(), new CountDownLatch(1)});
+        dependencyServices.add(new Object[] {"newSingleThreadExecutor(ThreadFactory)",  DependencyExecutors.newSingleThreadExecutor(new TestThreadFactory("newSingleThreadExecutor")), new CountDownLatch(1)});
+        dependencyServices.add(new Object[] {"newCachedThreadPool()",                   DependencyExecutors.newCachedThreadPool(), new CountDownLatch(1)});
+        dependencyServices.add(new Object[] {"newCachedThreadPool(ThreadFactory)",      DependencyExecutors.newCachedThreadPool(new TestThreadFactory("newCachedThreadPool")), new CountDownLatch(1)});
+
+        return dependencyServices.toArray(new Object[dependencyServices.size()][]);
     }
 
     /**
@@ -51,31 +58,33 @@ public class DependencyExecutorsIT {
      * <br/> <img src="../../../../resources/DAG.png" />
      * @throws InterruptedException Should not happen.
      */
-    @Test
-    public void completeTest() throws InterruptedException {
+    @Test(dataProvider = "dependencyExecutorServiceProvider")
+    public void testScenario(@SuppressWarnings("unused") String testName, DependencyExecutorService subject, CountDownLatch latch) throws InterruptedException {
         // Given
         final Queue<String> appendTo = new ConcurrentLinkedQueue<>();
 
         // When
-        Future<?> kJob = subject.submit(new TestJob(appendTo, K), initialDelay);
-        Future<?> lJob = subject.submit(new TestJob(appendTo, L), initialDelay);
-        Future<?> mJob = subject.submit(new TestJob(appendTo, M), initialDelay);
+        Future<?> kJob = subject.submit(new TestJob(latch, appendTo, K));
+        Future<?> lJob = subject.submit(new TestJob(latch, appendTo, L));
+        Future<?> mJob = subject.submit(new TestJob(latch, appendTo, M));
 
-        Future<?> fJob = subject.submit(new TestJob(appendTo, F), initialDelay);
-        Future<?> gJob = subject.submit(new TestJob(appendTo, G), initialDelay, kJob);
-        Future<?> hJob = subject.submit(new TestJob(appendTo, H), initialDelay, kJob);
-        Future<?> iJob = subject.submit(new TestJob(appendTo, I), initialDelay, lJob, mJob);
-        Future<?> jJob = subject.submit(new TestJob(appendTo, J), initialDelay, mJob);
+        Future<?> fJob = subject.submitWithDependencies(new TestJob(latch, appendTo, F));
+        Future<?> gJob = subject.submitWithDependencies(new TestJob(latch, appendTo, G), kJob);
+        Future<?> hJob = subject.submitWithDependencies(new TestJob(latch, appendTo, H), kJob);
+        Future<?> iJob = subject.submitWithDependencies(new TestJob(latch, appendTo, I), lJob, mJob);
+        Future<?> jJob = subject.submitWithDependencies(new TestJob(latch, appendTo, J), mJob);
 
-        Future<?> cJob = subject.submit(new TestJob(appendTo, C), initialDelay, fJob, gJob, hJob);
-        Future<?> dJob = subject.submit(new TestJob(appendTo, D), initialDelay, iJob);
-        Future<?> eJob = subject.submit(new TestJob(appendTo, E), initialDelay, hJob, iJob, jJob);
+        Future<?> cJob = subject.submitWithDependencies(new TestJob(latch, appendTo, C), fJob, gJob, hJob);
+        Future<?> dJob = subject.submitWithDependencies(new TestJob(latch, appendTo, D), iJob);
+        Future<?> eJob = subject.submitWithDependencies(new TestJob(latch, appendTo, E), hJob, iJob, jJob);
 
-        subject.submit(new TestJob(appendTo, A), initialDelay, cJob, dJob);
-        subject.submit(new TestJob(appendTo, B), initialDelay, eJob);
+        subject.submitWithDependencies(new TestJob(latch, appendTo, A), cJob, dJob);
+        subject.submitWithDependencies(new TestJob(latch, appendTo, B), eJob);
 
+        // Latch serves as a way to make sure no job completes before all jobs are created; just a way to enforce some sort of concurrency.
+        latch.countDown();
         subject.shutdown();
-        assertThat(subject.awaitTermination(JOB_DELAY*4, TimeUnit.MILLISECONDS), is(true));
+        assertThat("Thread pool termination timeout", subject.awaitTermination(30, TimeUnit.SECONDS), is(true));
         List<String> results = Arrays.asList(appendTo.toArray(new String[appendTo.size()]));
 
         // Then
@@ -105,34 +114,38 @@ public class DependencyExecutorsIT {
 
 
     private static final class TestJob implements Runnable {
+        private final CountDownLatch latch;
         private final Queue<String> appendTo;
         private final String appendValue;
 
-        TestJob(Queue<String> appendTo, String appendValue) {
+        TestJob(CountDownLatch latch, Queue<String> appendTo, String appendValue) {
+            this.latch = latch;
             this.appendTo = appendTo;
             this.appendValue = appendValue;
         }
 
         @Override
         public void run() {
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException("Error during latch wait", e);
+            }
             appendTo.add(appendValue);
         }
     }
 
-    private static final class DelayJob implements Runnable {
-        private final long delay;
+    private static final class TestThreadFactory implements ThreadFactory {
+        private int counter = 0;
+        private String prefix = "";
 
-        DelayJob(long delay) {
-            this.delay = delay;
+        TestThreadFactory(String prefix) {
+            this.prefix = prefix;
         }
 
         @Override
-        public void run() {
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                throw new RuntimeException("Error during thread sleep", e);
-            }
+        public Thread newThread(Runnable r) {
+            return new Thread(r, prefix + "-" + counter++);
         }
     }
 }

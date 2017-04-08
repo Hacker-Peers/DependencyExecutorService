@@ -12,29 +12,29 @@ import java.util.concurrent.Future;
 public interface DependencyExecutorService extends ExecutorService {
     /**
      * Same as {@link ExecutorService#submit(Callable)}, but will wait for all dependent futures to be completed before running the task.
-     * @param task the task to submit
+     * @param task the task to submitWithDependencies
      * @param dependsOn (optional) one or many tasks that must complete before this task can run
      * @param <T> The result type returned by this task
      * @return a Future representing pending completion of the task
      */
-    <T> Future<T> submit(Callable<T> task, Future<?> ... dependsOn);
+    <T> Future<T> submitWithDependencies(Callable<T> task, Future<?> ... dependsOn);
 
     /**
      * Same as {@link ExecutorService#submit(Runnable)}, but will wait for all dependent futures to be completed before running the task.
-     * @param task the task to submit
+     * @param task the task to submitWithDependencies
      * @param dependsOn (optional) one or many tasks that must complete before this task can run
      * @return a Future representing pending completion of the task
      */
-    Future<?> submit(Runnable task, Future<?> ... dependsOn);
+    Future<?> submitWithDependencies(Runnable task, Future<?> ... dependsOn);
 
     /**
      * Same as {@link ExecutorService#submit(Runnable, Object)}, but will wait for all dependent futures to be completed before running the task.
-     * @param task the task to submit
+     * @param task the task to submitWithDependencies
      * @param result the result to return
      * @param dependsOn a Future representing pending completion of the task
      * @param <T> The result type given in parameter
-     * @return
+     * @return a Future representing pending completion of the task
      */
-    <T> Future<T> submit(Runnable task, T result, Future<?> ... dependsOn);
+    <T> Future<T> submitWithDependencies(Runnable task, T result, Future<?> ... dependsOn);
 
 }

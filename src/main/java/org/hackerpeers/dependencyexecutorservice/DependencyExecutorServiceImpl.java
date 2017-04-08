@@ -20,17 +20,17 @@ class DependencyExecutorServiceImpl implements DependencyExecutorService{
     }
 
     @Override
-    public <T> Future<T> submit(Callable<T> task, Future<?> ... dependsOn) {
+    public <T> Future<T> submitWithDependencies(Callable<T> task, Future<?> ... dependsOn) {
         return delegate.submit(new CallableWithDependencies<>(task, dependsOn));
     }
 
     @Override
-    public Future<?> submit(Runnable task, Future<?> ... dependsOn) {
+    public Future<?> submitWithDependencies(Runnable task, Future<?> ... dependsOn) {
         return delegate.submit(new RunnableWithDependencies(task, dependsOn));
     }
 
     @Override
-    public <T> Future<T> submit(Runnable task, T result, Future<?> ... dependsOn) {
+    public <T> Future<T> submitWithDependencies(Runnable task, T result, Future<?> ... dependsOn) {
         return delegate.submit(new RunnableWithDependencies(task, dependsOn), result);
     }
 

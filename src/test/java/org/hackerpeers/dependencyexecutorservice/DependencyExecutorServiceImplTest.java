@@ -118,7 +118,7 @@ public class DependencyExecutorServiceImplTest {
         doReturn(expected).when(mockExecutorService).submit(any(Callable.class));
 
         // When
-        Future actual = subject.submit(param, dependency);
+        Future actual = subject.submitWithDependencies(param, dependency);
 
         // Then
         verify(mockExecutorService, times(1)).submit(callableCaptor.capture());
@@ -137,7 +137,7 @@ public class DependencyExecutorServiceImplTest {
         doReturn(expected).when(mockExecutorService).submit(any(Runnable.class));
 
         // When
-        Future actual = subject.submit(param, new Future[] {dependency});
+        Future actual = subject.submitWithDependencies(param, dependency);
 
         // Then
         verify(mockExecutorService, times(1)).submit(runnableCaptor.capture());
@@ -157,7 +157,7 @@ public class DependencyExecutorServiceImplTest {
         doReturn(expected).when(mockExecutorService).submit(any(Runnable.class), anyObject());
 
         // When
-        Future actual = subject.submit(param, result, dependency);
+        Future actual = subject.submitWithDependencies(param, result, dependency);
 
         // Then
         verify(mockExecutorService, times(1)).submit(runnableCaptor.capture(), eq(result));
