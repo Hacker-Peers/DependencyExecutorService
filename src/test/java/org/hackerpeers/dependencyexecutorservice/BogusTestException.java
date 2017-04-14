@@ -1,7 +1,7 @@
 package org.hackerpeers.dependencyexecutorservice;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 class BogusTestException extends Exception {
     BogusTestException() {

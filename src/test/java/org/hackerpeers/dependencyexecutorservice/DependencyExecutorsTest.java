@@ -17,7 +17,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 public class DependencyExecutorsTest {
     @Mock

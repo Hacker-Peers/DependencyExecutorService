@@ -19,7 +19,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.testng.Assert.fail;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 public class RunnableWithDependenciesTest {
     @Mock

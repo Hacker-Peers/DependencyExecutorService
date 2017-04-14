@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 class RunnableWithDependencies implements Runnable {
     private final Runnable delegate;

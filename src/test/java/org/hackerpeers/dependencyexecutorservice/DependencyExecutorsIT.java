@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 public class DependencyExecutorsIT{
     private static final int NB_THREADS = 10;

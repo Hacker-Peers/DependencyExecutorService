@@ -6,7 +6,7 @@ import java.util.concurrent.Future;
 
 /**
  * Variant of the native {@link ExecutorService} that simplify the creation of tasks with dependencies from one another.
- * @author @sberthiaume
+ * @author sberthiaume
  * @see ExecutorService
  */
 public interface DependencyExecutorService extends ExecutorService {

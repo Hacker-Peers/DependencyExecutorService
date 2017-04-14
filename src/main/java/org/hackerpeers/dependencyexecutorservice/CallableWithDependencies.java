@@ -4,7 +4,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 class CallableWithDependencies<T> implements Callable<T> {
     private final Callable<T> delegate;

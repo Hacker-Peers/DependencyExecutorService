@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 class DependencyExecutorServiceImpl implements DependencyExecutorService{
     private final ExecutorService delegate;

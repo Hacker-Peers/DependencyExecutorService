@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadFactory;
 
 /**
  * Factory utility class for new DependencyExecutorServices
- * @author @sberthiaume
+ * @author sberthiaume
  */
 @SuppressWarnings("WeakerAccess") // This is a self-contained lib, nothing is outside the package itself.
 public class DependencyExecutors {

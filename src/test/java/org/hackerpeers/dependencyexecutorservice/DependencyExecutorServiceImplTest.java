@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
- * @author @sberthiaume
+ * @author sberthiaume
  */
 public class DependencyExecutorServiceImplTest {
     private DependencyExecutorServiceImpl subject;
