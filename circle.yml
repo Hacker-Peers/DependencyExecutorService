@@ -9,6 +9,6 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
     - mkdir -p $CIRCLE_ARTIFACTS/libs/
+    - find . # Listing all folder structure
     - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r ./build/reports/tests $CIRCLE_TEST_REPORTS/junit-html/
-    - find ./build/libs -type f -name '*.jar' -exec cp {} $CIRCLE_ARTIFACTS/libs/ \;

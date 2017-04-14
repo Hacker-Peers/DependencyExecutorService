@@ -4,8 +4,11 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
+//apply plugin: 'signing'
 
 group 'org.hackerpeers'
+archivesBaseName = name
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.7
@@ -15,6 +18,27 @@ targetCompatibility = 1.7
 test {
     // enable TestNG support (default is JUnit)
     useTestNG()
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
 }
 
 repositories {
@@ -27,9 +51,6 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
+//signing {
+//    sign configurations.archives
+//}
