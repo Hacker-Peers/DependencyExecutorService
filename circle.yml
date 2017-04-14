@@ -9,6 +9,7 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
     - mkdir -p $CIRCLE_ARTIFACTS/libs/
+    - if [ -e ./gradlew ]; then ./gradlew build jacocoTestReport coveralls;else gradle build jacocoTestReport coveralls;fi
     - find . # Listing all folder structure
     - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r ./build/reports/tests $CIRCLE_TEST_REPORTS/junit-html/
