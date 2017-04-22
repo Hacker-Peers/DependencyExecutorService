@@ -14,17 +14,15 @@ machine:
 dependencies:
   pre:
     - chmod +x gradlew
-  post:
-    - if [ -e ./gradlew ]; then alias gradle=./gradlew;fi
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
     - mkdir -p $CIRCLE_ARTIFACTS/libs/
   override:
-    - gradle clean test jacocoTestReport coveralls
+    - ./gradlew clean test jacocoTestReport coveralls
   post:
-    - gradle build
+    - ./gradlew build
 #    - find . # Listing all folder structure
     - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r ./build/reports/tests $CIRCLE_TEST_REPORTS/junit-html/
@@ -33,4 +31,4 @@ deployment:
   master:
     branch: master
     commands:
-      - gradle clean test uploadArchives
+      - ./gradlew clean test uploadArchives
