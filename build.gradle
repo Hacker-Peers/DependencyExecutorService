@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
-//apply plugin: 'signing'
+apply plugin: 'signing'
 
 group 'org.hackerpeers'
 archivesBaseName = name
@@ -51,6 +51,51 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
 
-//signing {
-//    sign configurations.archives
-//}
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Dependency Executor Service'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'Library to facilitate the management of tasks having dependencies.'
+                url 'https://github.com/Hacker-Peers/DependencyExecutorService'
+
+                scm {
+                    connection 'scm:git:https://github.com/Hacker-Peers/DependencyExecutorService.git'
+                    developerConnection 'https://github.com/Hacker-Peers/DependencyExecutorService.git'
+                    url 'https://github.com/Hacker-Peers/DependencyExecutorService.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'sberthiaume'
+                        name 'Simon Berthiaume'
+                        email 'sberthiaume@hackerpeers.org'
+                    }
+                }
+            }
+        }
+    }
+}
