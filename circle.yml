@@ -12,23 +12,25 @@ machine:
     - echo "ossrhUsername=$OSSRH_USERNAME" >> ~/.gradle/gradle.properties
     - echo "ossrhPassword=$OSSRH_PASSWORD" >> ~/.gradle/gradle.properties
 dependencies:
-  override:
-     - chmod +x gradlew
+  pre:
+    - chmod +x gradlew
+  post:
+    - if [ -e ./gradlew ]; then alias gradle=./gradlew;fi
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
     - mkdir -p $CIRCLE_ARTIFACTS/libs/
   override:
-    - if [ -e ./gradlew ]; then ./gradlew clean test jacocoTestReport coveralls;else gradle clean test jacocoTestReport coveralls;fi
+    - gradle clean test jacocoTestReport coveralls
   post:
-    - if [ -e ./gradlew ]; then ./gradlew build;else gradle build;fi
+    - gradle build
 #    - find . # Listing all folder structure
     - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r ./build/reports/tests $CIRCLE_TEST_REPORTS/junit-html/
-    - find ./build/libs -type f -name '*.jar' -exec cp {} $CIRCLE_ARTIFACTS/libs \;
+    - cp -r ./build/libs/* $CIRCLE_ARTIFACTS/libs
 deployment:
   master:
     branch: master
     commands:
-      - if [ -e ./gradlew ]; then ./gradlew clean test uploadArchives;else gradle clean test uploadArchives;fi
+      - gradle clean test uploadArchives
