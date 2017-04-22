@@ -9,6 +9,8 @@ machine:
     - echo "signing.keyId=$PGP_KEY_ID" >> ~/.gradle/gradle.properties
     - echo "signing.password=$PGP_PASSWORD" >> ~/.gradle/gradle.properties
     - echo "signing.secretKeyRingFile=$HOME/.gnupg/secring.gpg" >> ~/.gradle/gradle.properties
+    - echo "ossrhUsername=$OSSRH_USERNAME" >> ~/.gradle/gradle.properties
+    - echo "ossrhPassword=$OSSRH_PASSWORD" >> ~/.gradle/gradle.properties
 dependencies:
   override:
      - chmod +x gradlew
