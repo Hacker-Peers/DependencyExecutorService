@@ -79,6 +79,8 @@ uploadArchives {
                     connection 'scm:git:https://github.com/Hacker-Peers/DependencyExecutorService.git'
                     developerConnection 'https://github.com/Hacker-Peers/DependencyExecutorService.git'
                     url 'https://github.com/Hacker-Peers/DependencyExecutorService.git'
+                    branch 'master'
+                    tag 'HEAD'
                 }
 
                 licenses {
