@@ -28,7 +28,8 @@ test:
     - cp -r ./build/reports/tests $CIRCLE_TEST_REPORTS/junit-html/
     - cp -r ./build/libs/* $CIRCLE_ARTIFACTS/libs
 deployment:
-  master:
-    branch: master
+  release:
+    tag: /test-v[0-9]+(\.[0-9]+)*/
+    owner: Hacker-Peers
     commands:
       - ./gradlew clean test uploadArchives
