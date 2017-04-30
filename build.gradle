@@ -9,7 +9,7 @@ apply plugin: 'signing'
 
 group 'org.hackerpeers'
 archivesBaseName = name
-version '1.0.0-SNAPSHOT'
+version '1.0.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -79,7 +79,7 @@ uploadArchives {
                     connection 'scm:git:http://github.com/Hacker-Peers/DependencyExecutorService.git'
                     developerConnection 'scm:git:https://github.com/Hacker-Peers/DependencyExecutorService.git'
                     url 'https://github.com/Hacker-Peers/DependencyExecutorService.git'
-                    tag 'HEAD'
+                    tag 'v1.0.0'
                 }
 
                 licenses {
